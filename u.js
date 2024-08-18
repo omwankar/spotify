@@ -3,9 +3,22 @@ let currsong = new Audio();
 let songs;
 let currfolder;
 
+function convertSecondsToMinSec(seconds) {
+  let minutes = Math.floor(seconds / 60);
+  let remainingSeconds = Math.round(seconds % 60);
+
+  // Pad single-digit seconds with a leading zero if necessary
+  if (remainingSeconds < 10) {
+    remainingSeconds = '0' + remainingSeconds;
+  }
+
+  return `${minutes}:${remainingSeconds}`
+}
+
 async function getsongs(folder) {
-  let a = await fetch(`/${folder}/`);
   currfolder = folder
+  let a = await fetch(`/${folder}/`);
+  
   let responce = await a.text();
 
   let div = document.createElement("div");
@@ -34,26 +47,16 @@ async function getsongs(folder) {
   }
 
   Array.from(document.querySelector(".songList").getElementsByTagName("li")).forEach(e => {
-    e.addEventListener("click", () => {
+    e.addEventListener("click", element => {
       playsong(e.querySelector(".inf").firstElementChild.innerHTML.trim());
     });
   });
 
-
+  return songs
 }
 
 
-function convertSecondsToMinSec(seconds) {
-  let minutes = Math.floor(seconds / 60);
-  let remainingSeconds = Math.round(seconds % 60);
 
-  // Pad single-digit seconds with a leading zero if necessary
-  if (remainingSeconds < 10) {
-    remainingSeconds = '0' + remainingSeconds;
-  }
-
-  return `${minutes}:${remainingSeconds}`
-}
 
 
 
@@ -65,26 +68,26 @@ const playsong = (track, pause = false) => {
     playbtn.src = "pause.svg"
   }
   document.querySelector(".songinfo").innerHTML = decodeURI(track)
-  document.querySelector(".time").innerHTML = ` ${convertSecondsToMinSec(currsong.currentTime)}/${convertSecondsToMinSec(currsong.duration)}`
+  document.querySelector(".time").innerHTML =  "00:00 / 00:00"
 
 }
-let cardcontaner = document.querySelector(".cardcointaner")
 
 async function uplodeAlblums() {
   let a = await fetch(`/songs/`);
-
+  
   let responce = await a.text();
-
+  
   let div = document.createElement("div");
   div.innerHTML = responce;
   let anchor = div.getElementsByTagName("a")
+  let cardcontaner = document.querySelector(".cardcointaner")
   let array = Array.from(anchor)
   for (let index = 0; index < array.length; index++) {
     const e = array[index];
 
     if (e.href.includes("/songs") && !e.href.includes(".htaccess")) {
       let folder = (e.href.split("/").slice(-2)[0])
-      let a = await fetch(`/songs/${folder}/info.json`);
+      let a = await fetch(`/songs/${folder}/info.json`)
   
   let responce = await a.json()
 
@@ -96,13 +99,14 @@ async function uplodeAlblums() {
                         <p>${responce.dec}</p>`
     }
 
+  }
     Array.from(document.getElementsByClassName("card")).forEach(e => {
       e.addEventListener("click", async item => {
         
         songs = await getsongs(`songs/${item.currentTarget.dataset.folder}`)
+        playMusic(songs[0])
       })
     })
-  }
 }
 
 async function main() {
