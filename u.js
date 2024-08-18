@@ -4,7 +4,7 @@ let songs;
 let currfolder;
 
 async function getsongs(folder) {
-  let a = await fetch(`http://127.0.0.1:3000/${folder}/`);
+  let a = await fetch(`/${folder}/`);
   currfolder = folder
   let responce = await a.text();
 
