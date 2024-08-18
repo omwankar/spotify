@@ -84,7 +84,7 @@ async function uplodeAlblums() {
 
     if (e.href.includes("/songs") && !e.href.includes(".htaccess")) {
       let folder = (e.href.split("/").slice(-2)[0])
-      let a = await fetch(`http://127.0.0.1:3000/songs/${folder}/info.json`);
+      let a = await fetch(`/songs/${folder}/info.json`);
   
   let responce = await a.json()
 
@@ -153,7 +153,7 @@ async function main() {
     }
   });
 
-  next.addEventListener("click", () => {
+  await next.addEventListener("click", () => {
     let index = songs.indexOf(currsong.src.split("/").splice(-1)[0]);
     if (index < songs.length - 1) {
       playsong(songs[index + 1]);
@@ -168,5 +168,4 @@ async function main() {
 
 
 
-
-main()
+ main()
