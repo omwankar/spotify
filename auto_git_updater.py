@@ -1,3 +1,11 @@
+import shutil
+import os
+
+# Delete /tmp/spotify if it exists
+clone_path = "/tmp/spotify"
+if os.path.exists(clone_path):
+    shutil.rmtree(clone_path)
+
 import os
 import subprocess
 from datetime import datetime
