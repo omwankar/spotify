@@ -1,0 +1,11 @@
+services:
+  - type: cron
+    name: daily-git-updater
+    env: python
+    schedule: '0 4 * * *'  # Runs every day at 9:30 AM IST (4:00 UTC)
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python auto_git_updater.py"
+    envVars:
+      - key: GITHUB_TOKEN
+        sync: false
