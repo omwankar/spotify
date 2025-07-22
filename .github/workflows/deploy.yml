@@ -1,9 +1,8 @@
-name: Deploy to Render
+name: Daily Render Deploy
 
 on:
-  push:
-    branches:
-      - main  # or 'master' if that’s your default branch
+  schedule:
+    - cron: '0 2 * * *'  # Runs every day at 2:00 AM UTC (adjust below if needed)
 
 jobs:
   deploy:
